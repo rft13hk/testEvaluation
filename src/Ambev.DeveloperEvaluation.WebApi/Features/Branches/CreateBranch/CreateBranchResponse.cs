@@ -1,6 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Enums;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Branchs.CreateBranch;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches.CreateBranch;
 
 /// <summary>
 /// API response model for CreateBranch operation

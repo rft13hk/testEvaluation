@@ -1,13 +1,18 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 
-namespace Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branches.GetBranch;
 
 /// <summary>
 /// Response model for GetBranch operation
 /// </summary>
 public class GetBranchResult
 {
+    /// <summary>
+    /// The unique identifier of the Branch
+    /// </summary>
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Gets the Branch name
     /// Must not be null or empty.

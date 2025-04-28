@@ -2,7 +2,7 @@
 using Ambev.DeveloperEvaluation.Domain.Validation;
 using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Branchs.CreateBranch;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches.CreateBranch;
 
 /// <summary>
 /// Validator for CreateBranchRequest that defines validation rules for Branch creation.

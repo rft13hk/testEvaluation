@@ -1,18 +1,19 @@
 using AutoMapper;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 
-namespace Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branches.GetAllBranches;
 
 /// <summary>
 /// Profile for mapping between Branch entity and GetUserResponse
 /// </summary>
-public class GetBranchProfile : Profile
+public class GetAllBranchesProfile : Profile
 {
     /// <summary>
     /// Initializes the mappings for GetUser operation
     /// </summary>
-    public GetBranchProfile()
+    public GetAllBranchesProfile()
     {
-        CreateMap<Branch, GetBranchResult>();
+        CreateMap<Branch, GetAllBranchesResult.BranchDto>();
+        //CreateMap<Branch, GetBranchResult>();
     }
 }

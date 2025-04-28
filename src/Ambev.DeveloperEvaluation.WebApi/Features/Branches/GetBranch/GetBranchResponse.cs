@@ -1,12 +1,17 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Branchs.CreateBranch;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches.GetBranch;
 
 /// <summary>
-/// Represents a request to create a new Branch in the system.
+/// API response model for CreateBranch operation
 /// </summary>
-public class CreateBranchRequest
+public class GetBranchResponse
 {
+    /// <summary>
+    /// The unique identifier of the created user
+    /// </summary>
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Gets the Branch name
     /// Must not be null or empty.

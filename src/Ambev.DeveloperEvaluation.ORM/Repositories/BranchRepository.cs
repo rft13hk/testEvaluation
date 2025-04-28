@@ -41,7 +41,8 @@ public class BranchRepository : IBranchRepository
     /// <returns>The branch if found, null otherwise</returns>
     public async Task<Branch?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Branches.FindAsync(id, cancellationToken);
+        return await _context.Branches
+            .FindAsync(id, cancellationToken);
     }
 
     /// <summary>
@@ -54,7 +55,8 @@ public class BranchRepository : IBranchRepository
     /// <returns>A list of branches for the requested page</returns>
     public async Task<IEnumerable<Branch>> GetAllAsync(int page = 1, int size = 10, string? order = null, CancellationToken cancellationToken = default)
     {
-        IQueryable<Branch> query = _context.Branches.AsQueryable();
+        IQueryable<Branch> query = _context.Branches
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(order))
         {
