@@ -9,8 +9,26 @@ namespace Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
 public class CreateBranchResult
 {
     /// <summary>
-    /// Gets or sets the unique identifier of the newly created branch.
+    /// Gets the Branch name
+    /// Must not be null or empty.
     /// </summary>
-    /// <value>A GUID that uniquely identifies the created branch in the system.</value>
-    public Guid Id { get; set; }
+    public string BranchName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Represents the universal Date/Time of when the Branch was created;
+    /// If not informed, assumes the universal date/time of where the system is running;
+    /// </summary>
+    public DateTimeOffset CreateAt { get; set; } = DateTimeOffset.UtcNow;
+
+    /// <summary>
+    /// Represents the universal Date/Time of when the Branch was updated;
+    /// If not informed, assumes the universal date/time of where the system is running;
+    /// </summary>
+    public DateTimeOffset UpdateAt { get; set; } = DateTimeOffset.UtcNow;
+    
+    /// <summary>
+    /// Indicates which user created this Branch.
+    /// </summary>
+    public Guid UserId { get; set; } = Guid.Empty;
+
 }
