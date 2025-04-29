@@ -14,6 +14,24 @@ public class GetAllBranchesResult
     public IEnumerable<BranchDto> Branches { get; set; } = new List<BranchDto>();
 
     /// <summary>
+    /// Gets or sets the total number of branches available in the system.
+    /// This is used for pagination purposes.
+    /// </summary>
+    public int TotalItems { get; set; }
+
+    /// <summary>
+    /// Gets or sets the total number of pages available based on the page size.
+    /// This is used for pagination purposes.
+    /// </summary>
+    public int TotalPages { get; set; }
+
+    /// <summary>
+    /// Gets or sets the current page number.
+    /// </summary>
+    public int CurrentPage { get; set; } = 1;
+
+
+    /// <summary>
     /// Represents a Data Transfer Object (DTO) for a Branch.
     /// This is used to shape the data returned in the GetAllBranchesResult.
     /// </summary>

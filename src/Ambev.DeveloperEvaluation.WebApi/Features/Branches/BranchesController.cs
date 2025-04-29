@@ -117,6 +117,9 @@ public class BranchesController : BaseController
 
         var responseData = new GetAllBranchesResponse()
         {
+            TotalItems = result.TotalItems,
+            TotalPages = result.TotalPages,
+            CurrentPage = result.CurrentPage,
             Branches = _mapper.Map<IEnumerable<GetAllBranchesResponse.BranchDto>>(result.Branches)
         };
 

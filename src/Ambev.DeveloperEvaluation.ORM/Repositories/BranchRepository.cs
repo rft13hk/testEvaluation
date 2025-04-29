@@ -125,4 +125,29 @@ public class BranchRepository : IBranchRepository
         await _context.SaveChangesAsync(cancellationToken);
         return true;
     }
-}
+
+
+    /// <summary>
+    /// Retrieves the total count of branches in the database
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns>The total count of branches</returns>
+    public async Task<int> GetTotalBranchesCountAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Branches.CountAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Retrieves pagination information for branches
+    /// </summary>
+    /// <param name="pageSize">The size of each page</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A tuple containing the total number of branches and total pages</returns>
+    public async Task<(int totalBranches, int totalPages)> GetBranchesPaginationInfoAsync(int pageSize, CancellationToken cancellationToken = default)
+    {
+        var totalBranches = await GetTotalBranchesCountAsync(cancellationToken);
+        var totalPages = (int)Math.Ceiling((double)totalBranches / pageSize);
+        return (totalBranches, totalPages);
+    }
+} 
+

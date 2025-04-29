@@ -36,10 +36,28 @@ public class GetAllBranchesHandler : IRequestHandler<GetAllBranchesCommand, GetA
     public async Task<GetAllBranchesResult> Handle(GetAllBranchesCommand request, CancellationToken cancellationToken)
     {
         var branches = await _branchRepository.GetAllAsync(request.Page, request.Size, request.Order, cancellationToken);
+        var totalBranches = await _branchRepository.GetTotalBranchesCountAsync(cancellationToken);
+        
+        if (branches == null || !branches.Any())
+        {
+            return new GetAllBranchesResult
+            {
+                TotalItems = 0,
+                TotalPages = 0,
+                CurrentPage = request.Page,
+                Branches = Enumerable.Empty<GetAllBranchesResult.BranchDto>()
+            };
+        }
+        // Calculate total pages based on the total number of branches and the page size
+        var totalPages = (int)Math.Ceiling((double)totalBranches / request.Size);
+
         var branchResults = _mapper.Map<IEnumerable<GetAllBranchesResult.BranchDto>>(branches);
 
         return new GetAllBranchesResult
         {
+            TotalItems = totalBranches,
+            TotalPages = totalPages,
+            CurrentPage = request.Page,
             Branches = branchResults
         };
     }

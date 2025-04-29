@@ -41,5 +41,21 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns>True if the branch was deleted, false if not found</returns>
         Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+
+        /// <summary>
+        /// Retrieves the total number of branches in the repository
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The total count of branches</returns>
+        Task<int> GetTotalBranchesCountAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Retrieves pagination information for branches
+        /// </summary>
+        /// <param name="pageSize">The size of each page</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A tuple containing the total number of branches and total pages</returns>
+        Task<(int totalBranches, int totalPages)> GetBranchesPaginationInfoAsync(int pageSize, CancellationToken cancellationToken = default);
     }
 }
