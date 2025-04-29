@@ -10,6 +10,7 @@ public class DefaultContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Branch> Branches { get; set; }
+    public DbSet<Costumer> Costumers { get; set; }
     
 
     public DefaultContext(DbContextOptions<DefaultContext> options) : base(options)

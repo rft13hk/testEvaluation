@@ -52,11 +52,17 @@ public class BranchRepository : IBranchRepository
     /// <param name="size">Number of items per page (default: 10)</param>
     /// <param name="order">Ordering of results (e.g., "BranchName desc, CreateAt asc")</param>
     /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="activeRecordsOnly">If true, only active records will be returned</param>
     /// <returns>A list of branches for the requested page</returns>
-    public async Task<IEnumerable<Branch>> GetAllAsync(int page = 1, int size = 10, string? order = null, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Branch>> GetAllAsync(int page = 1, int size = 10, string? order = null, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
         IQueryable<Branch> query = _context.Branches
             .AsQueryable();
+
+        if (activeRecordsOnly)
+        {
+            query = query.Where(b => b.DeletedAt == null); // Assuming there is a DeletedAt property in Branch
+        }
 
         if (!string.IsNullOrEmpty(order))
         {
@@ -121,7 +127,19 @@ public class BranchRepository : IBranchRepository
         if (branch == null)
             return false;
 
-        _context.Branches.Remove(branch);
+        if (branch.DeletedAt != null)
+            return false;
+
+        try
+        {
+            _context.Branches.Remove(branch);
+        }
+        catch
+        {
+            branch.DeletedAt = DateTime.UtcNow;
+            _context.Branches.Update(branch);
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
         return true;
     }
@@ -132,9 +150,17 @@ public class BranchRepository : IBranchRepository
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns>The total count of branches</returns>
-    public async Task<int> GetTotalBranchesCountAsync(CancellationToken cancellationToken = default)
+    public async Task<int> GetTotalBranchesCountAsync(bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
+        if (activeRecordsOnly)
+        {
+            return await _context.Branches
+                .Where(b => b.DeletedAt == null) // Assuming there is a DeletedAt property in Branch
+                .CountAsync(cancellationToken);
+        }
+        // If not filtering by active records, return the total count of branches
         return await _context.Branches.CountAsync(cancellationToken);
+
     }
 
     /// <summary>
@@ -143,9 +169,9 @@ public class BranchRepository : IBranchRepository
     /// <param name="pageSize">The size of each page</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A tuple containing the total number of branches and total pages</returns>
-    public async Task<(int totalBranches, int totalPages)> GetBranchesPaginationInfoAsync(int pageSize, CancellationToken cancellationToken = default)
+    public async Task<(int totalBranches, int totalPages)> GetBranchesPaginationInfoAsync(int pageSize, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
-        var totalBranches = await GetTotalBranchesCountAsync(cancellationToken);
+        var totalBranches = await GetTotalBranchesCountAsync(activeRecordsOnly, cancellationToken);
         var totalPages = (int)Math.Ceiling((double)totalBranches / pageSize);
         return (totalBranches, totalPages);
     }

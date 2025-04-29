@@ -104,13 +104,14 @@ public class BranchesController : BaseController
     /// <returns>A paginated list of Branch details</returns>
     [HttpGet]
     [ProducesResponseType(typeof(ApiResponseWithData<GetAllBranchesResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetBranches([FromQuery] int _page = 1, [FromQuery] int _size = 10, [FromQuery] string? _order = null, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetBranches([FromQuery] int _page = 1, [FromQuery] int _size = 10, [FromQuery] string? _order = null, [FromQuery] bool _activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
         var command = new GetAllBranchesCommand
         {
             Page = _page,
             Size = _size,
-            Order = _order
+            Order = _order,
+            ActiveRecordsOnly = _activeRecordsOnly
         };
 
         var result = await _mediator.Send(command, cancellationToken);

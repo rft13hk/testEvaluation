@@ -1,11 +1,11 @@
 using MediatR;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.GetAllBranches;
+namespace Ambev.DeveloperEvaluation.Application.Costumers.GetAllCostumers;
 
 /// <summary>
-/// Command to retrieve a paginated list of branches.
+/// Command to retrieve a paginated list of Costumers.
 /// </summary>
-public class GetAllBranchesCommand : IRequest<GetAllBranchesResult>
+public class GetAllCostumersCommand : IRequest<GetAllCostumersResult>
 {
     
 
@@ -20,7 +20,7 @@ public class GetAllBranchesCommand : IRequest<GetAllBranchesResult>
     public int Size { get; set; } = 10;
 
     /// <summary>
-    /// Gets or sets the ordering of results (e.g., "BranchName desc, CreateAt asc").
+    /// Gets or sets the ordering of results (e.g., "CostumerName desc, CreateAt asc").
     /// Default is ascending if not specified.
     /// </summary>
     public string? Order { get; set; }

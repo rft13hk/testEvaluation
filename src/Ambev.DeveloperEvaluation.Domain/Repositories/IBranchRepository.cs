@@ -30,8 +30,9 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="size">Number of items per page (default: 10)</param>
         /// <param name="order">Ordering of results (e.g., "BranchName desc, CreateAt asc")</param>
         /// <param name="cancellationToken">Cancellation token</param>
+        /// <param name="activeRecordsOnly">If true, only active records will be returned</param>
         /// <returns>A list of branches for the requested page</returns>
-        Task<IEnumerable<Branch>> GetAllAsync(int page = 1, int size = 10, string? order = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Branch>> GetAllAsync(int page = 1, int size = 10, string? order = null, bool activeRecordsOnly = true, CancellationToken cancellationToken = default);
 
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The total count of branches</returns>
-        Task<int> GetTotalBranchesCountAsync(CancellationToken cancellationToken = default);
+        Task<int> GetTotalBranchesCountAsync(bool activeRecordsOnly = true, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves pagination information for branches
@@ -56,6 +57,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="pageSize">The size of each page</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A tuple containing the total number of branches and total pages</returns>
-        Task<(int totalBranches, int totalPages)> GetBranchesPaginationInfoAsync(int pageSize, CancellationToken cancellationToken = default);
+        Task<(int totalBranches, int totalPages)> GetBranchesPaginationInfoAsync(int pageSize, bool activeRecordsOnly = true, CancellationToken cancellationToken = default);
     }
 }

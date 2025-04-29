@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches.GetAllBranches;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Costumers.GetAllCostumers;
 
 /// <summary>
-/// Represents the result of a request to retrieve a paginated list of branches.
+/// Represents the result of a request to retrieve a paginated list of costumers.
 /// </summary>
-public class GetAllBranchesResponse
+public class GetAllCostumersResponse
 {
     /// <summary>
-    /// Gets or sets the list of branch details for the current page.
+    /// Gets or sets the list of costumer details for the current page.
     /// </summary>
-    public IEnumerable<BranchDto> Branches { get; set; } = new List<BranchDto>();
+    public IEnumerable<CostumerDto> Costumers { get; set; } = new List<CostumerDto>();
 
         /// <summary>
-    /// Gets or sets the total number of branches available in the system.
+    /// Gets or sets the total number of costumers available in the system.
     /// This is used for pagination purposes.
     /// </summary>
     public int TotalItems { get; set; }
@@ -32,38 +32,38 @@ public class GetAllBranchesResponse
 
     
     /// <summary>
-    /// Represents a Data Transfer Object (DTO) for a Branch.
-    /// This is used to shape the data returned in the GetAllBranchesResponse.
+    /// Represents a Data Transfer Object (DTO) for a Costumer.
+    /// This is used to shape the data returned in the GetAllCostumersResponse.
     /// </summary>
-    public class BranchDto
+    public class CostumerDto
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the branch.
+        /// Gets or sets the unique identifier of the costumer.
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the branch.
+        /// Gets or sets the name of the costumer.
         /// </summary>
-        public string BranchName { get; set; } = string.Empty;
+        public string CostumerName { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the universal Date/Time of when the Branch was created.
+        /// Gets or sets the universal Date/Time of when the Costumer was created.
         /// </summary>
         public DateTimeOffset CreateAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the universal Date/Time of when the Branch was last updated.
+        /// Gets or sets the universal Date/Time of when the Costumer was last updated.
         /// </summary>
         public DateTimeOffset UpdateAt { get; set; }
 
         /// <summary>
-        /// Gets or sets the universal Date/Time of when the Branch was deleted.
+        /// Gets or sets the universal Date/Time of when the Costumer was deleted.
         /// </summary>
         public DateTimeOffset? DeletedAt { get; set; } = null;
 
         /// <summary>
-        /// Gets or sets the ID of the user who created this branch.
+        /// Gets or sets the ID of the user who created this costumer.
         /// </summary>
         public Guid UserId { get; set; }
     }

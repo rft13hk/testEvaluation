@@ -35,8 +35,8 @@ public class GetAllBranchesHandler : IRequestHandler<GetAllBranchesCommand, GetA
     /// <returns>A paginated list of Branch details</returns>
     public async Task<GetAllBranchesResult> Handle(GetAllBranchesCommand request, CancellationToken cancellationToken)
     {
-        var branches = await _branchRepository.GetAllAsync(request.Page, request.Size, request.Order, cancellationToken);
-        var totalBranches = await _branchRepository.GetTotalBranchesCountAsync(cancellationToken);
+        var branches = await _branchRepository.GetAllAsync(request.Page, request.Size, request.Order, request.ActiveRecordsOnly, cancellationToken);
+        var totalBranches = await _branchRepository.GetTotalBranchesCountAsync(request.ActiveRecordsOnly, cancellationToken);
         
         if (branches == null || !branches.Any())
         {
