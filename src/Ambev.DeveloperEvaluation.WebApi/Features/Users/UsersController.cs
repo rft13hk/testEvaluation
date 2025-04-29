@@ -90,6 +90,44 @@ public class UsersController : BaseController
         });
     }
 
+
+    /// <summary>
+    /// Retrieves a user by their email
+    /// </summary>
+    /// <param name="email">The email of the user</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The user details if found</returns>
+    [HttpGet("email/{email}")]
+    [ProducesResponseType(typeof(ApiResponseWithData<GetUserResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserByEmail([FromRoute] string email, CancellationToken cancellationToken)
+    {
+        var request = new GetUserByEmailRequest { Email = email };
+        var validator = new GetUserByEmailRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors);
+
+        var command = _mapper.Map<GetUserByEmailCommand>(request.Email);
+        var response = await _mediator.Send(command, cancellationToken);
+
+        if (response == null)
+            return NotFound(new ApiResponse
+            {
+                Success = false,
+                Message = "User not found"
+            });
+
+        return Ok(new ApiResponseWithData<GetUserResponse>
+        {
+            Success = true,
+            Message = "User retrieved successfully",
+            Data = _mapper.Map<GetUserResponse>(response)
+        });
+    }
+
     /// <summary>
     /// Deletes a user by their ID
     /// </summary>

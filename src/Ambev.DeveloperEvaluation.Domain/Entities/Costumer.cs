@@ -48,7 +48,7 @@ public class Costumer: BaseEntity
     /// <summary>
     /// Navigation property to the User entity that created this Costumer.
     /// </summary>
-    public User CreatedByUser { get; set; } = new User();
+    public User CreatedByUser { get; set; } = null!; 
 
     
 }

@@ -17,5 +17,9 @@ public class BranchConfiguration : IEntityTypeConfiguration<Branch>
         builder.Property(u => u.UserId).HasColumnType("uuid").IsRequired(); 
         builder.Property(u => u.UpdateAt).IsRequired();
         builder.Property(u => u.CreateAt).IsRequired();
+        builder.Property(u => u.DeletedAt)
+            .HasColumnType("timestamp with time zone")
+            .HasDefaultValue(null)
+            .IsRequired(false);
     }
 }

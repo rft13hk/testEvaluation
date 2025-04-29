@@ -4,42 +4,58 @@ using Ambev.DeveloperEvaluation.Domain.Common;
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
 /// <summary>
-/// Represents a Branch, used to identify in sales which branch the sale occurred from.
+/// Represents a Product, used to identify in sales which Product the sale occurred from.
 /// </summary>
-public class Branch: BaseEntity
+public class Product: BaseEntity
 {
+    
     /// <summary>
-    /// Gets the Branch name
+    /// Represents the Product code (SKU).
+    /// Must be valid and not null or empty.
+    /// </summary>
+    public string ProductCode { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Gets the Product name
     /// Must not be null or empty.
     /// </summary>
-    public string BranchName { get; set; } = string.Empty;
+    public string ProductName { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// Represents the universal Date/Time of when the Branch was created;
+    /// Represents the Product price;
+    /// Must be valid and not null or empty.
+    /// </summary>
+    public double Price { get; set; } = 0.0;
+
+    /// <summary>
+    /// Represents the universal Date/Time of when the Product was created;
     /// If not informed, assumes the universal date/time of where the system is running;
     /// </summary>
     public DateTimeOffset CreateAt { get; set; } = DateTimeOffset.UtcNow;
 
     /// <summary>
-    /// Represents the universal Date/Time of when the Branch was updated;
+    /// Represents the universal Date/Time of when the Product was updated;
     /// If not informed, assumes the universal date/time of where the system is running;
     /// </summary>
     public DateTimeOffset UpdateAt { get; set; } = DateTimeOffset.UtcNow;
-    
+
+
     /// <summary>
-    /// Represents the universal Date/Time of when the Branch was deleted;
+    /// Represents the universal Date/Time of when the Product was deleted;
     /// If not informed, assumes the universal date/time of where the system is running;
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; } = null;
-
+    
     /// <summary>
-    /// Indicates which user created this Branch.
+    /// Indicates which user created this Product.
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
 
     /// <summary>
-    /// Navigation property to the User entity that created this Branch.
+    /// Navigation property to the User entity that created this Product.
     /// </summary>
     public User CreatedByUser { get; set; } = null!; 
+
     
 }
