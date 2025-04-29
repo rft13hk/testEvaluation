@@ -20,6 +20,12 @@ namespace Ambev.DeveloperEvaluation.Application.Costumers.CreateCostumer;
 public class CreateCostumerCommand : IRequest<CreateCostumerResult>
 {
     /// <summary>
+    /// Represents the CPF (Cadastro de Pessoas Físicas) of the Costumer.
+    /// Must be valid and not null or empty.
+    /// </summary>
+    public string CPF { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the name of the Costumer to be created.
     /// </summary>
     public string CostumerName { get; set; } = string.Empty;
@@ -27,7 +33,7 @@ public class CreateCostumerCommand : IRequest<CreateCostumerResult>
     /// <summary>
     /// Gets or sets the ID of the user who created this Costumer.
     /// </summary>
-    public Guid UserId { get; set; }
+    public Guid UserId { get; set; } = Guid.Empty;
 
     public ValidationResultDetail Validate()
     {

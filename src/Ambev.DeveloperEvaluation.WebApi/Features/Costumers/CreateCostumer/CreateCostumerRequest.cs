@@ -8,6 +8,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Costumers.CreateCostumer;
 public class CreateCostumerRequest
 {
     /// <summary>
+    /// Represents the CPF (Cadastro de Pessoas Físicas) of the Costumer.
+    /// Must be valid and not null or empty.
+    /// </summary>
+    public string CPF { get; set; } = string.Empty;
+    
+    /// <summary>
     /// Gets the Costumer name
     /// Must not be null or empty.
     /// </summary>
