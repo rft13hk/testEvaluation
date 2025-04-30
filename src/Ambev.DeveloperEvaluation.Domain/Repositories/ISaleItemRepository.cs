@@ -35,6 +35,16 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         Task<IEnumerable<SaleItem>> GetAllAsync(int page = 1, int size = 10, string? order = null, bool activeRecordsOnly = true, CancellationToken cancellationToken = default);
 
 
+
+        /// <summary>
+        /// Retrieves a list of active SaleItems by SaleId
+        /// </summary>
+        /// <param name="saleId">The unique identifier of the sale</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A list of active SaleItems for the specified sale</returns>
+        Task<IEnumerable<SaleItem>> GetActiveItemsBySaleIdAsync(Guid saleId, CancellationToken cancellationToken = default);
+        
+
         /// <summary>
         /// Deletes a SaleItem from the repository
         /// </summary>

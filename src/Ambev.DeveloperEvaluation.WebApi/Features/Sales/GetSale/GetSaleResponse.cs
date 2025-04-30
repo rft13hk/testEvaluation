@@ -7,12 +7,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 /// </summary>
 public class GetSaleResponse
 {
-/// <summary>
+    /// <summary>
     /// Represents the Sale number (SKU).
     /// Must be valid and not null or empty.
     /// </summary>
     public string SaleNumber { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// Gets the Sale Date
     /// Must not be null or empty.
@@ -48,10 +48,16 @@ public class GetSaleResponse
     /// If not informed, assumes the universal date/time of where the system is running;
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; } = null;
-    
+
     /// <summary>
     /// Indicates which user created this Sale.
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
+
+    public Decimal TotalValue { get; set; } = 0.0M;
+
+    public Decimal TotalDiscount { get; set; } = 0.0M;
+
+    public Decimal TotalWithDiscount { get; set; } = 0.0M;
 
 }

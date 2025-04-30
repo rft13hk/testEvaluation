@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 
@@ -54,5 +55,11 @@ public class GetSaleResult
     /// Indicates which user created this Sale.
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
+
+    public Decimal TotalValue { get; set; } = 0.0M;
+    
+    public Decimal TotalDiscount { get; set; } = 0.0M;
+
+    public Decimal TotalWithDiscount { get; set; } = 0.0M;
 
 }

@@ -164,6 +164,19 @@ public class SaleItemRepository : ISaleItemRepository
     }
 
     /// <summary>
+    /// Retrieves all active SaleItems for a specified sale
+    /// </summary>
+    /// <param name="saleId">The unique identifier of the sale</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A list of active SaleItems for the specified sale</returns>
+    public async Task<IEnumerable<SaleItem>> GetActiveItemsBySaleIdAsync(Guid saleId, CancellationToken cancellationToken = default)
+    {
+        return await _context.SaleItems
+            .Where(si => si.SaleId == saleId && si.DeletedAt == null) // Assuming DeletedAt indicates inactive items
+            .ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
     /// Checks if a product is already launched for the specified sale
     /// </summary>
     /// <param name="saleId">The unique identifier of the sale</param>

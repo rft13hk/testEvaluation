@@ -11,6 +11,9 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
 {
     private readonly ISaleRepository _SaleRepository;
+
+    private readonly ISaleItemRepository _SaleItemRepository;
+
     private readonly IMapper _mapper;
 
     /// <summary>
@@ -21,9 +24,11 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
     /// <param name="validator">The validator for GetSaleCommand</param>
     public GetSaleHandler(
         ISaleRepository SaleRepository,
+        ISaleItemRepository SaleItemRepository,
         IMapper mapper)
     {
         _SaleRepository = SaleRepository;
+        _SaleItemRepository = SaleItemRepository;
         _mapper = mapper;
     }
 
@@ -45,6 +50,25 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
         if (Sale == null)
             throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
 
-        return _mapper.Map<GetSaleResult>(Sale);
+        var returnedSale = _mapper.Map<GetSaleResult>(Sale);
+
+        var items = await _SaleItemRepository.GetActiveItemsBySaleIdAsync(request.Id, cancellationToken);
+        if (items != null || items.Any())
+        {
+            var discounts = items.Sum(i => i.Discount);
+            var values = items.Sum(i => i.TotalPrice);
+
+            returnedSale.TotalDiscount = discounts;
+            returnedSale.TotalValue = values;
+            returnedSale.TotalWithDiscount = values - discounts;
+        }
+        else
+        {
+            returnedSale.TotalDiscount = 0;
+            returnedSale.TotalValue = 0;
+            returnedSale.TotalWithDiscount = 0;
+        }
+
+        return returnedSale;
     }
 }
