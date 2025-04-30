@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
+using System.Linq;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetAllSales;
 
@@ -11,6 +12,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetAllSales;
 public class GetAllSalesHandler : IRequestHandler<GetAllSalesCommand, GetAllSalesResult>
 {
     private readonly ISaleRepository _SaleRepository;
+    private readonly ISaleItemRepository _SaleItemRepository;
     private readonly IMapper _mapper;
 
     /// <summary>
@@ -21,9 +23,11 @@ public class GetAllSalesHandler : IRequestHandler<GetAllSalesCommand, GetAllSale
     /// <param name="validator">The validator for GetSaleCommand</param>
     public GetAllSalesHandler(
         ISaleRepository SaleRepository,
+        ISaleItemRepository SaleItemRepository,
         IMapper mapper)
     {
         _SaleRepository = SaleRepository;
+        _SaleItemRepository = SaleItemRepository;
         _mapper = mapper;
     }
 
@@ -52,6 +56,29 @@ public class GetAllSalesHandler : IRequestHandler<GetAllSalesCommand, GetAllSale
         var totalPages = (int)Math.Ceiling((double)totalSales / request.Size);
 
         var SaleResults = _mapper.Map<IEnumerable<GetAllSalesResult.SaleDto>>(Sales);
+
+        foreach (var Sale in SaleResults)
+        {
+            var items = await _SaleItemRepository.GetActiveItemsBySaleIdAsync(Sale.Id, cancellationToken);
+            if (items != null && items.Any())
+            {
+                var discounts = items.Sum(i => i.Discount);
+                var values = items.Sum(i => i.TotalPrice);
+
+                Sale.TotalDiscount = discounts;
+                Sale.TotalValue = values;
+                Sale.TotalWithDiscount = values - discounts;
+                Sale.TotalItems = items.Count();
+            }
+            else
+            {
+                Sale.TotalDiscount = 0;
+                Sale.TotalValue = 0;
+                Sale.TotalWithDiscount = 0;
+                Sale.TotalItems = 0;
+            }
+        }
+
 
         return new GetAllSalesResult
         {

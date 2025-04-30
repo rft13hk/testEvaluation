@@ -54,10 +54,23 @@ public class GetSaleResponse
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
 
-    public Decimal TotalValue { get; set; } = 0.0M;
+    /// <summary>
+        /// Indicates the status of the Sale.
+        /// </summary>
+        public int TotalItems { get; set; } = 0;
 
-    public Decimal TotalDiscount { get; set; } = 0.0M;
+        /// <summary>
+        /// Represents the total value of the Sale.
+        /// </summary>
+        public Decimal TotalValue { get; set; } = 0.0M;
 
-    public Decimal TotalWithDiscount { get; set; } = 0.0M;
+        /// <summary>
+        /// Represents the total discount applied to the Sale.
+        /// </summary>
+        public Decimal TotalDiscount { get; set; } = 0.0M;
 
+        /// <summary>
+        /// Represents the total discount applied to the Sale.
+        /// </summary>
+        public Decimal TotalWithDiscount { get; set; } = 0.0M;
 }

@@ -53,7 +53,7 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
         var returnedSale = _mapper.Map<GetSaleResult>(Sale);
 
         var items = await _SaleItemRepository.GetActiveItemsBySaleIdAsync(request.Id, cancellationToken);
-        if (items != null || items.Any())
+        if (items != null && items.Any())
         {
             var discounts = items.Sum(i => i.Discount);
             var values = items.Sum(i => i.TotalPrice);
@@ -61,12 +61,14 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
             returnedSale.TotalDiscount = discounts;
             returnedSale.TotalValue = values;
             returnedSale.TotalWithDiscount = values - discounts;
+            returnedSale.TotalItems = items.Count();
         }
         else
         {
             returnedSale.TotalDiscount = 0;
             returnedSale.TotalValue = 0;
             returnedSale.TotalWithDiscount = 0;
+            returnedSale.TotalItems = 0;
         }
 
         return returnedSale;
