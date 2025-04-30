@@ -26,7 +26,7 @@ public class Product: BaseEntity
     /// Represents the Product price;
     /// Must be valid and not null or empty.
     /// </summary>
-    public double Price { get; set; } = 0.0;
+    public decimal Price { get; set; } = 0.0m;
 
     /// <summary>
     /// Represents the universal Date/Time of when the Product was created;

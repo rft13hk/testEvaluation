@@ -36,7 +36,7 @@ public class GetSaleItemResult
     /// Represents the quantity of the saleitem.
     /// Must be valid and not null or empty.
     /// </summary>
-    public int Quantity { get; set; } = 0;  
+    public int Quantity { get; set; } = 0;
 
     /// <summary>
     /// Represents the discount applied to the saleitem.
@@ -50,6 +50,10 @@ public class GetSaleItemResult
     /// </summary>
     public decimal TotalPrice { get; set; } = 0.0m;
 
+    public decimal TotalPriceWithDiscount
+    {
+        get { return TotalPrice - Discount; }
+    }
 
     public SaleItemStatus StatusItem { get; set; }
 
@@ -70,5 +74,5 @@ public class GetSaleItemResult
     /// <summary>
     /// Indicates which user created this Sale.
     /// </summary>
-    public Guid UserId { get; set; } = Guid.Empty;    
+    public Guid UserId { get; set; } = Guid.Empty;
 }

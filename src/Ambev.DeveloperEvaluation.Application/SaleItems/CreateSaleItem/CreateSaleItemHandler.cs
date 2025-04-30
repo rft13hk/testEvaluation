@@ -3,6 +3,7 @@ using MediatR;
 using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleItems.CreateSaleItem;
 
@@ -12,6 +13,8 @@ namespace Ambev.DeveloperEvaluation.Application.SaleItems.CreateSaleItem;
 public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, CreateSaleItemResult>
 {
     private readonly ISaleItemRepository _SaleItemRepository;
+
+    private readonly IProductRepository _productRepository; // Assuming you need to validate the product
     private readonly IUserRepository _userRepository; // Assuming you need to validate the user
     private readonly IMapper _mapper;
 
@@ -21,10 +24,11 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
     /// <param name="SaleItemRepository">The SaleItem repository.</param>
     /// <param name="userRepository">The user repository.</param>
     /// <param name="mapper">The AutoMapper instance.</param>
-    public CreateSaleItemHandler(ISaleItemRepository SaleItemRepository, IUserRepository userRepository, IMapper mapper)
+    public CreateSaleItemHandler(ISaleItemRepository SaleItemRepository, IUserRepository userRepository, IProductRepository productRepository, IMapper mapper)
     {
         _SaleItemRepository = SaleItemRepository;
         _userRepository = userRepository;
+        _productRepository = productRepository;
         _mapper = mapper;
     }
 
@@ -52,10 +56,45 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
         SaleItem.CreateAt = DateTimeOffset.UtcNow;
         SaleItem.UpdateAt = DateTimeOffset.UtcNow;
 
+        if (SaleItem.Quantity <= 0)
+            throw new ArgumentException("Quantity must be greater than zero.");
+
+        if (SaleItem.Quantity >20)
+            throw new ArgumentException("Quantity must be less than or equal to 20.");
+
+        var priceProduct = await _productRepository.GetByIdAsync(command.ProductId, cancellationToken);
+        if (priceProduct == null)
+            throw new InvalidOperationException($"Product with ID {command.ProductId} not found.");
+
+        SaleItem.Price = priceProduct.Price;
+
+        SaleItem.Discount = CalculateDiscount(SaleItem.Quantity, SaleItem.Price);
+
+        SaleItem.TotalPrice = SaleItem.Quantity * SaleItem.Price;
+
+        SaleItem.StatusItem = SaleItemStatus.NotCancelled;
         
 
         var createdSaleItem = await _SaleItemRepository.CreateAsync(SaleItem, cancellationToken);
         var result = _mapper.Map<CreateSaleItemResult>(createdSaleItem);
         return result;
     }
+
+    private decimal CalculateDiscount(int quantity, decimal price)
+    {
+        var value = quantity * price;
+
+        if (quantity >= 4 && quantity < 10)
+        {
+            return  value * 0.10m; // 10% discount
+        }
+        else if (quantity >= 10 && quantity <= 20)
+        {
+            return value * 0.20m; // 20% discount
+        }
+
+        return 0.0m; // No discount
+    }
+
+
 }

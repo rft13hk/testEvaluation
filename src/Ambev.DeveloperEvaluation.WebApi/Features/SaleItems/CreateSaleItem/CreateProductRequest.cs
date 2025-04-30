@@ -20,12 +20,6 @@ public class CreateSaleItemRequest
     public Guid ProductId { get; set; }
 
     /// <summary>
-    /// represents the unit price of the product.
-    /// Must be valid and not null or empty.
-    /// </summary>
-    public decimal Price { get; set; } = 0.0m;
-
-    /// <summary>
     /// Represents the quantity of the product.
     /// Must be valid and not null or empty.
     /// </summary>

@@ -80,6 +80,10 @@ public class GetAllSaleItemsResult
         /// </summary>
         public decimal TotalPrice { get; set; } = 0.0m;
 
+        public decimal TotalPriceWithDiscount 
+        { 
+            get { return TotalPrice - Discount;} 
+        }
 
         public SaleItemStatus StatusItem { get; set; }
 
