@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace Ambev.DeveloperEvaluation.ORM.Mapping;
 
-public class SaleItemsConfiguration : IEntityTypeConfiguration<SaleItems>
+public class SaleItemsConfiguration : IEntityTypeConfiguration<SaleItem>
 {
-    public void Configure(EntityTypeBuilder<SaleItems> builder)
+    public void Configure(EntityTypeBuilder<SaleItem> builder)
     {
         builder.ToTable("SaleItems");
 
@@ -42,7 +42,7 @@ public class SaleItemsConfiguration : IEntityTypeConfiguration<SaleItems>
 
         builder.HasOne(s2 => s2.User)
             .WithMany(s1 => s1.SaleItems)
-            .HasForeignKey(s => s.Id)
+            .HasForeignKey(s => s.UserId)  
             .OnDelete(DeleteBehavior.Restrict);
         
     }

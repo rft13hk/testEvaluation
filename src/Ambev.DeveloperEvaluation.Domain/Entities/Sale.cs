@@ -75,7 +75,7 @@ public class Sale: BaseEntity
     /// Represents the collection of SaleItems associated with this Sale.
     /// This is a one-to-many relationship, where one Sale can have many SaleItems.
     /// </summary>
-    public virtual ICollection<SaleItems>? SaleItems { get; set; }
+    public virtual ICollection<SaleItem>? SaleItems { get; set; }
 
     /// <summary>
     /// Navigation property to the User entity that created this Sale.

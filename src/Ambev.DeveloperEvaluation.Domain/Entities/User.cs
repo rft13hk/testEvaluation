@@ -154,7 +154,7 @@ public class User : BaseEntity, IUser
     /// Represents the collection of SaleItems associated with this User.
     /// This is a one-to-many relationship, where one User can have many SaleItems.
     /// </summary>
-    public virtual ICollection<SaleItems>? SaleItems { get; set; } 
+    public virtual ICollection<SaleItem>? SaleItems { get; set; } 
 
     /// <summary>
     /// Navigation property to the Branch entity that created this Sale.

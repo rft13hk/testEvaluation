@@ -7,7 +7,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities;
 /// <summary>
 /// Represents a Sale, used to identify in sales which Sale the sale occurred from.
 /// </summary>
-public class SaleItems: BaseEntity
+public class SaleItem: BaseEntity
 {
     /// <summary>
     /// Represents the unique identifier of the Sale.
@@ -67,6 +67,11 @@ public class SaleItems: BaseEntity
     /// If not informed, assumes the universal date/time of where the system is running;
     /// </summary>
     public DateTimeOffset? DeletedAt { get; set; } = null;
+
+    /// <summary>
+    /// Indicates which user created this Sale.
+    /// </summary>
+    public Guid UserId { get; set; } = Guid.Empty;    
 
     #region Navigation Properties
     

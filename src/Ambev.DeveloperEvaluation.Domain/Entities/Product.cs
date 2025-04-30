@@ -58,7 +58,7 @@ public class Product: BaseEntity
     /// Represents the collection of SaleItems associated with this Product.
     /// This is a one-to-many relationship, where one Product can have many SaleItems.
     /// </summary>
-    public virtual ICollection<SaleItems>? SaleItems { get; set; }
+    public virtual ICollection<SaleItem>? SaleItems { get; set; }
 
     /// <summary>
     /// Navigation property to the User entity that created this Product.
