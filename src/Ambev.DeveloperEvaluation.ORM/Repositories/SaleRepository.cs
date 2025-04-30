@@ -42,7 +42,11 @@ public class SaleRepository : ISaleRepository
     public async Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Sales
-            .FindAsync(id, cancellationToken);
+            .AsNoTracking()
+            .Include(s => s.Costumer) // Assuming Sale has a navigation property to Costumer
+            .Include(s => s.Branch) // Assuming Sale has a navigation property to Branch
+            .Include(s => s.User) // Assuming Sale has a navigation property to User
+            .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
 
     /// <summary>
@@ -54,7 +58,11 @@ public class SaleRepository : ISaleRepository
     public async Task<Sale?> GetBySaleNumberAsync(string SaleNumber, CancellationToken cancellationToken = default)
     {
         return await _context.Sales
-            .FirstOrDefaultAsync(c => c.SaleNumber == SaleNumber, cancellationToken);
+            .AsNoTracking()
+            .Include(s => s.Costumer) // Assuming Sale has a navigation property to Costumer
+            .Include(s => s.Branch) // Assuming Sale has a navigation property to Branch
+            .Include(s => s.User) // Assuming Sale has a navigation property to User        
+            .FirstOrDefaultAsync(c => c.DeletedAt == null && c.SaleNumber == SaleNumber, cancellationToken);
     }
 
     /// <summary>
@@ -94,6 +102,10 @@ public class SaleRepository : ISaleRepository
         }
 
         return await query
+            .AsNoTracking()
+            .Include(s => s.Costumer) // Assuming Sale has a navigation property to Costumer
+            .Include(s => s.Branch) // Assuming Sale has a navigation property to Branch
+            .Include(s => s.User) // Assuming Sale has a navigation property to User        
             .Skip((page - 1) * size)
             .Take(size)
             .ToListAsync(cancellationToken);
@@ -183,8 +195,23 @@ public class SaleRepository : ISaleRepository
     /// <returns>A tuple containing the total number of Sales and total pages</returns>
     public async Task<(int totalSales, int totalPages)> GetSalesPaginationInfoAsync(int pageSize, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
+        if (pageSize <= 0)
+            throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize));
+
+        // Get the total number of Sales
         var totalSales = await GetTotalSalesCountAsync(activeRecordsOnly, cancellationToken);
+
+        // If there are no Sales, return 0 for both totalSales and totalPages
+        // This is important to avoid division by zero in the next step
+        // and to ensure that the pagination logic works correctly
+        // e.g., if totalSales = 0 and pageSize = 10, totalPages = 0
+        if (totalSales == 0)
+            return (0, 0);
+
+        // Calculate the total number of pages
         var totalPages = (int)Math.Ceiling((double)totalSales / pageSize);
+
+        // Return the total number of Sales and total pages
         return (totalSales, totalPages);
     }
 } 

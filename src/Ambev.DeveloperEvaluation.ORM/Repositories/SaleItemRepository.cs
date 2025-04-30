@@ -198,8 +198,24 @@ public class SaleItemRepository : ISaleItemRepository
     /// <returns>A tuple containing the total number of SaleItems and total pages</returns>
     public async Task<(int totalSaleItems, int totalPages)> GetSaleItemsPaginationInfoAsync(int pageSize, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
+        // Validate pageSize
+        if (pageSize <= 0)
+            throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize));
+
+        // Get the total count of SaleItems
         var totalSaleItems = await GetTotalSaleItemsCountAsync(activeRecordsOnly, cancellationToken);
+
+
+        // If there are no Sales, return 0 for both totalSaleItems and totalPages
+        // This is important to avoid division by zero in the next step
+        // and to ensure that the pagination logic works correctly
+        // e.g., if totalSaleItems = 0 and pageSize = 10, totalPages = 0
+        if (totalSaleItems == 0)
+            return (0, 0);
+
+        // Calculate total pages
         var totalPages = (int)Math.Ceiling((double)totalSaleItems / pageSize);
+
         return (totalSaleItems, totalPages);
     }
 } 

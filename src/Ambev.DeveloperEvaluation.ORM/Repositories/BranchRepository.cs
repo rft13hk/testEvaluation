@@ -42,7 +42,9 @@ public class BranchRepository : IBranchRepository
     public async Task<Branch?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Branches
-            .FindAsync(id, cancellationToken);
+            .Include(b => b.Users) // Assuming there is a navigation property for Users in Branch
+            .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken); // Changed to FirstOrDefaultAsync for better null handling
     }
 
     /// <summary>
@@ -57,6 +59,7 @@ public class BranchRepository : IBranchRepository
     public async Task<IEnumerable<Branch>> GetAllAsync(int page = 1, int size = 10, string? order = null, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
         IQueryable<Branch> query = _context.Branches
+            .Include(b => b.Users) // Assuming there is a navigation property for Users in Branch
             .AsQueryable();
 
         if (activeRecordsOnly)
@@ -171,8 +174,23 @@ public class BranchRepository : IBranchRepository
     /// <returns>A tuple containing the total number of branches and total pages</returns>
     public async Task<(int totalBranches, int totalPages)> GetBranchesPaginationInfoAsync(int pageSize, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
+        // Validate pageSize
+        if (pageSize <= 0)
+            throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize));
+
+        // Get the total count of branches
         var totalBranches = await GetTotalBranchesCountAsync(activeRecordsOnly, cancellationToken);
+        
+        // If there are no branches, return 0 for both totalBranches and totalPages
+        // This is important to avoid division by zero in the next step
+        // and to ensure that the pagination logic works correctly
+        // e.g., if totalBranches = 0 and pageSize = 10, totalPages = 0
+        if (totalBranches == 0)
+            return (0, 0);
+
+        // Calculate the total number of pages
         var totalPages = (int)Math.Ceiling((double)totalBranches / pageSize);
+
         return (totalBranches, totalPages);
     }
 } 

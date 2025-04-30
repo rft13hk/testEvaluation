@@ -42,7 +42,9 @@ public class CostumerRepository : ICostumerRepository
     public async Task<Costumer?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Costumers
-            .FindAsync(id, cancellationToken);
+            .Include(b => b.Users) // Assuming there is a navigation property for Users in Costumer
+            .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
     }
 
     /// <summary>
@@ -54,6 +56,9 @@ public class CostumerRepository : ICostumerRepository
     public async Task<Costumer?> GetByCpfAsync(string cpf, CancellationToken cancellationToken = default)
     {
         return await _context.Costumers
+            .Where(c => c.DeletedAt == null) // Assuming there is a DeletedAt property in Costumer
+            .Include(c => c.Users) // Assuming there is a navigation property for Users in Costumer
+            .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
             .FirstOrDefaultAsync(c => c.CPF == cpf, cancellationToken);
     }
 
@@ -94,6 +99,8 @@ public class CostumerRepository : ICostumerRepository
         }
 
         return await query
+            .Include(b => b.Users) // Assuming there is a navigation property for Users in Costumer
+            .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
             .Skip((page - 1) * size)
             .Take(size)
             .ToListAsync(cancellationToken);
@@ -167,6 +174,7 @@ public class CostumerRepository : ICostumerRepository
         if (activeRecordsOnly)
         {
             return await _context.Costumers
+                .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance       
                 .Where(b => b.DeletedAt == null) // Assuming there is a DeletedAt property in Costumer
                 .CountAsync(cancellationToken);
         }
@@ -183,8 +191,23 @@ public class CostumerRepository : ICostumerRepository
     /// <returns>A tuple containing the total number of Costumers and total pages</returns>
     public async Task<(int totalCostumers, int totalPages)> GetCostumersPaginationInfoAsync(int pageSize, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
+        // Validate pageSize
+        if (pageSize <= 0)
+            throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize));
+
+        // Get the total number of Costumers
         var totalCostumers = await GetTotalCostumersCountAsync(activeRecordsOnly, cancellationToken);
+
+        // If there are no Costumers, return 0 for both totalCostumers and totalPages
+        // This is important to avoid division by zero in the next step
+        // and to ensure that the pagination logic works correctly
+        // e.g., if totalCostumers = 0 and pageSize = 10, totalPages = 0
+        if (totalCostumers == 0)
+            return (0, 0);
+
+        // Calculate total pages
         var totalPages = (int)Math.Ceiling((double)totalCostumers / pageSize);
+
         return (totalCostumers, totalPages);
     }
 } 

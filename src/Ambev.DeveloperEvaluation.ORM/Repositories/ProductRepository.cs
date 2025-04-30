@@ -42,7 +42,9 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Products
-            .FindAsync(id, cancellationToken);
+            .Include(b => b.UserId) // Assuming there is a navigation property for UserId in Product
+            .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken); // Changed to FirstOrDefaultAsync for better null handling
     }
 
     /// <summary>
@@ -54,7 +56,9 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> GetByProductCodeAsync(string productCode, CancellationToken cancellationToken = default)
     {
         return await _context.Products
-            .FirstOrDefaultAsync(c => c.ProductCode == productCode, cancellationToken);
+            .Include(c => c.UserId) // Assuming there is a navigation property for UserId in Product
+            .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
+            .FirstOrDefaultAsync(c => c.DeletedAt == null && c.ProductCode == productCode, cancellationToken);
     }
 
     /// <summary>
@@ -94,6 +98,8 @@ public class ProductRepository : IProductRepository
         }
 
         return await query
+            .Include(b => b.UserId) // Assuming there is a navigation property for UserId in Product
+            .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
             .Skip((page - 1) * size)
             .Take(size)
             .ToListAsync(cancellationToken);
@@ -183,8 +189,23 @@ public class ProductRepository : IProductRepository
     /// <returns>A tuple containing the total number of Products and total pages</returns>
     public async Task<(int totalProducts, int totalPages)> GetProductsPaginationInfoAsync(int pageSize, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
+        // Validate pageSize
+        if (pageSize <= 0)
+            throw new ArgumentException("Page size must be greater than zero.", nameof(pageSize));
+            
+        // Get the total count of Products
         var totalProducts = await GetTotalProductsCountAsync(activeRecordsOnly, cancellationToken);
+
+        // If there are no Products, return 0 for both totalProducts and totalPages
+        // This is important to avoid division by zero in the next step
+        // and to ensure that the pagination logic works correctly
+        // e.g., if totalProducts = 0 and pageSize = 10, totalPages = 0
+        if (totalProducts == 0)
+            return (0, 0);
+
+        // Calculate total pages based on the total number of Products and the page size
         var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
         return (totalProducts, totalPages);
     }
 } 
