@@ -21,5 +21,16 @@ public class BranchConfiguration : IEntityTypeConfiguration<Branch>
             .HasColumnType("timestamp with time zone")
             .HasDefaultValue(null)
             .IsRequired(false);
+
+        builder.HasOne(s2 => s2.Users)
+            .WithMany(s1 => s1.Branches)
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        builder.HasMany(s2 => s2.Sales)
+            .WithOne(s1 => s1.Branch)
+            .HasForeignKey(s => s.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

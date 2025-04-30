@@ -52,10 +52,21 @@ public class Product: BaseEntity
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
 
+    #region Navigation Properties
+
+    /// <summary>
+    /// Represents the collection of SaleItems associated with this Product.
+    /// This is a one-to-many relationship, where one Product can have many SaleItems.
+    /// </summary>
+    public virtual ICollection<SaleItems>? SaleItems { get; set; }
+
     /// <summary>
     /// Navigation property to the User entity that created this Product.
+    /// Represents a User, used to identify in sales which User the sale occurred from.
     /// </summary>
-    public User CreatedByUser { get; set; } = null!; 
+    public virtual required User User { get; set; }
+
+    #endregion
 
     
 }

@@ -28,5 +28,24 @@ public class CostumerConfiguration : IEntityTypeConfiguration<Costumer>
             .HasColumnType("timestamp with time zone")
             .HasDefaultValue(null)
             .IsRequired(false);
+
+        builder.HasOne(s2 => s2.Users)
+            .WithMany(s1 => s1.Costumers)
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(s2 => s2.Sales)
+            .WithOne(s1 => s1.Costumer)
+            .HasForeignKey(s => s.CostumerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+
     }
+
+
+
+
+
+
 }

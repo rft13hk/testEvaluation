@@ -45,10 +45,21 @@ public class Costumer: BaseEntity
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
 
-    /// <summary>
-    /// Navigation property to the User entity that created this Costumer.
-    /// </summary>
-    public User CreatedByUser { get; set; } = null!; 
 
+    #region Navigation Properties
+
+    /// <summary>
+    /// Represents the collection of Sale entities associated with this Costumer.
+    /// This is a one-to-many relationship, where one Costumer can have many Sales.
+    /// </summary>
+    public virtual required User Users { get; set; } 
+
+    /// <summary>
+    /// Represents the collection of Sale entities associated with this Costumer.
+    /// This is a one-to-many relationship, where one Costumer can have many Sales.
+    /// </summary>
+    public virtual ICollection<Sale>? Sales { get; set; }
+
+    #endregion
     
 }

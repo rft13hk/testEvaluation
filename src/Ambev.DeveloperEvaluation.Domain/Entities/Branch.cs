@@ -37,9 +37,21 @@ public class Branch: BaseEntity
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
 
+
+    #region Navigation Properties
+
     /// <summary>
-    /// Navigation property to the User entity that created this Branch.
+    /// Navigation property to the User entities associated with this Branch.
     /// </summary>
-    public User CreatedByUser { get; set; } = null!; 
+    public virtual required User Users { get; set; } 
+
+
+    /// <summary>
+    /// Represents the collection of Sale entities associated with this Branch.
+    /// This is a one-to-many relationship, where one Branch can have many Sales.
+    /// </summary>
+    public virtual ICollection<Sale>? Sales { get; set; }
+
+    #endregion
     
 }

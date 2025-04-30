@@ -5,17 +5,18 @@ using System.Text.RegularExpressions;
 
 namespace Ambev.DeveloperEvaluation.ORM.Mapping;
 
-public class ProductConfiguration : IEntityTypeConfiguration<Product>
+public class SaleConfiguration : IEntityTypeConfiguration<Sale>
 {
-    public void Configure(EntityTypeBuilder<Product> builder)
+    public void Configure(EntityTypeBuilder<Sale> builder)
     {
-        builder.ToTable("Products");
+        builder.ToTable("Sales");
 
         builder.HasKey(u => u.Id);
         builder.Property(u => u.Id).HasColumnType("uuid").HasDefaultValueSql("gen_random_uuid()");
-        builder.Property(u => u.ProductCode).IsRequired().HasMaxLength(8);
-        builder.Property(u => u.ProductName).IsRequired().HasMaxLength(100);
-        builder.Property(u => u.Price).IsRequired().HasColumnType("decimal(10,2)");
+        builder.Property(u => u.SaleNumber).IsRequired().HasMaxLength(50);
+        builder.Property(u => u.SaleDate).IsRequired();
+        builder.Property(u => u.CostumerId).HasColumnType("uuid").IsRequired();
+        builder.Property(u => u.BranchId).HasColumnType("uuid").IsRequired();
         builder.Property(u => u.UserId).HasColumnType("uuid").IsRequired(); 
         builder.Property(u => u.UpdateAt).IsRequired();
         builder.Property(u => u.CreateAt).IsRequired();
@@ -24,15 +25,24 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasDefaultValue(null)
             .IsRequired(false);
 
+        builder.HasOne(s2 => s2.Costumer)
+            .WithMany(s1 => s1.Sales)
+            .HasForeignKey(s => s.CostumerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(s2 => s2.Branch)
+            .WithMany(s1 => s1.Sales)
+            .HasForeignKey(s => s.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(s2 => s2.User)
-            .WithMany(s1 => s1.Products)
+            .WithMany(s1 => s1.Sales)
             .HasForeignKey(s => s.UserId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.HasMany(s2 => s2.SaleItems)
-            .WithOne(s1 => s1.Product)
-            .HasForeignKey(s => s.ProductId)
+            .WithOne(s1 => s1.Sale)
+            .HasForeignKey(s => s.SaleId)
             .OnDelete(DeleteBehavior.Restrict);
 
 
