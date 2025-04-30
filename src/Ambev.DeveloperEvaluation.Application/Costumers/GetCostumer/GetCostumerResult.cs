@@ -39,6 +39,6 @@ public class GetCostumerResult
     /// <summary>
     /// Navigation property to the User entity that created this Costumer.
     /// </summary>
-    public User CreatedByUser { get; set; } = new User();
+    public virtual User? User { get; set; } 
 
 }

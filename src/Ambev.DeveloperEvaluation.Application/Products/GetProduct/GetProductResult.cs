@@ -39,6 +39,6 @@ public class GetProductResult
     /// <summary>
     /// Navigation property to the User entity that created this Product.
     /// </summary>
-    public User CreatedByUser { get; set; } = new User();
+    public virtual User? User { get; set; } 
 
 }

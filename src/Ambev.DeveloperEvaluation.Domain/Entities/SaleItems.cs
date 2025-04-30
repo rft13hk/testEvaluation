@@ -1,5 +1,6 @@
 using System.Data.Common;
 using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
@@ -49,6 +50,9 @@ public class SaleItems: BaseEntity
     /// Must be valid and not null or empty.
     /// </summary>
     public decimal TotalPrice { get; set; } = 0.0m;
+
+
+    public SaleItemStatus StatusItem { get; set; }
 
     public DateTimeOffset CreateAt { get; set; } = DateTimeOffset.UtcNow;
 

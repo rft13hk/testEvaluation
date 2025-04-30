@@ -29,8 +29,11 @@ public static class ActiveUserSpecificationTestData
             Username = f.Name.FirstName(),
             Status = f.PickRandom<UserStatus>(),
             Phone = $"+55{f.Random.Number(11, 99)}{f.Random.Number(100000000, 999999999)}",
-            Role = f.PickRandom<UserRole> ()
-        });
+            Role = f.PickRandom<UserRole> (),
+            CreatedAt = f.Date.Past(1),
+            UpdatedAt = f.Date.Recent(1)
+            
+            });
 
     /// <summary>
     /// Generates a valid User entity with the specified status.
