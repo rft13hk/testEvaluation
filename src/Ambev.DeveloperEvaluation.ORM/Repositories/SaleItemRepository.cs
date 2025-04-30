@@ -164,6 +164,20 @@ public class SaleItemRepository : ISaleItemRepository
     }
 
     /// <summary>
+    /// Checks if a product is already launched for the specified sale
+    /// </summary>
+    /// <param name="saleId">The unique identifier of the sale</param>
+    /// <param name="productId">The unique identifier of the product</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>True if the product is already launched for the sale, false otherwise</returns>
+    public async Task<bool> IsProductLaunchedForSaleAsync(Guid saleId, Guid productId, CancellationToken cancellationToken = default)
+    {
+        return await _context.SaleItems
+            .AnyAsync(sp => sp.SaleId == saleId && sp.ProductId == productId, cancellationToken);
+    }
+
+
+    /// <summary>
     /// Retrieves pagination information for SaleItems
     /// </summary>
     /// <param name="pageSize">The size of each page</param>

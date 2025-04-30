@@ -22,7 +22,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The SaleItem if found, null otherwise</returns>
         Task<SaleItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
- 
+
         /// <summary>
         /// Retrieves a paginated list of SaleItems based on the provided parameters
         /// </summary>
@@ -42,6 +42,16 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns>True if the SaleItem was deleted, false if not found</returns>
         Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+
+        /// <summary>
+        /// Checks if a product is launched for a specific sale
+        /// </summary>
+        /// <param name="saleId">The unique identifier of the sale</param>
+        /// <param name="productId">The unique identifier of the product</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>True if the product is launched for the sale, false otherwise</returns>
+        Task<bool> IsProductLaunchedForSaleAsync(Guid saleId, Guid productId, CancellationToken cancellationToken = default);
 
 
         /// <summary>

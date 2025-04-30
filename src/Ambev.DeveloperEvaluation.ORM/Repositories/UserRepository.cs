@@ -56,6 +56,7 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
     }
 
+
     /// <summary>
     /// Deletes a user from the database
     /// </summary>

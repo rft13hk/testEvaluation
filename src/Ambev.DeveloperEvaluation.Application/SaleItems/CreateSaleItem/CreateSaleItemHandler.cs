@@ -12,8 +12,8 @@ namespace Ambev.DeveloperEvaluation.Application.SaleItems.CreateSaleItem;
 /// </summary>
 public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, CreateSaleItemResult>
 {
+    private readonly ISaleRepository _SaleRepository;
     private readonly ISaleItemRepository _SaleItemRepository;
-
     private readonly IProductRepository _productRepository; // Assuming you need to validate the product
     private readonly IUserRepository _userRepository; // Assuming you need to validate the user
     private readonly IMapper _mapper;
@@ -24,8 +24,9 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
     /// <param name="SaleItemRepository">The SaleItem repository.</param>
     /// <param name="userRepository">The user repository.</param>
     /// <param name="mapper">The AutoMapper instance.</param>
-    public CreateSaleItemHandler(ISaleItemRepository SaleItemRepository, IUserRepository userRepository, IProductRepository productRepository, IMapper mapper)
+    public CreateSaleItemHandler(ISaleRepository saleRepository, ISaleItemRepository SaleItemRepository, IUserRepository userRepository, IProductRepository productRepository, IMapper mapper)
     {
+        _SaleRepository = saleRepository;
         _SaleItemRepository = SaleItemRepository;
         _userRepository = userRepository;
         _productRepository = productRepository;
@@ -61,6 +62,11 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
 
         if (SaleItem.Quantity >20)
             throw new ArgumentException("Quantity must be less than or equal to 20.");
+
+        var exists = await _SaleItemRepository.IsProductLaunchedForSaleAsync(command.SaleId, command.ProductId, cancellationToken);
+        if (exists)
+            throw new InvalidOperationException($"Product with ID {command.ProductId} is already launched for the sale.");
+    
 
         var priceProduct = await _productRepository.GetByIdAsync(command.ProductId, cancellationToken);
         if (priceProduct == null)
