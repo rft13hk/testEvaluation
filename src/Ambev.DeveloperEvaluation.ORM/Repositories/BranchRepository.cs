@@ -42,7 +42,7 @@ public class BranchRepository : IBranchRepository
     public async Task<Branch?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Branches
-            .Include(b => b.Users) // Assuming there is a navigation property for Users in Branch
+            .Include(b => b.User) // Assuming there is a navigation property for Users in Branch
             .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
             .FirstOrDefaultAsync(b => b.Id == id, cancellationToken); // Changed to FirstOrDefaultAsync for better null handling
     }
@@ -59,7 +59,7 @@ public class BranchRepository : IBranchRepository
     public async Task<IEnumerable<Branch>> GetAllAsync(int page = 1, int size = 10, string? order = null, bool activeRecordsOnly = true, CancellationToken cancellationToken = default)
     {
         IQueryable<Branch> query = _context.Branches
-            .Include(b => b.Users) // Assuming there is a navigation property for Users in Branch
+            .Include(b => b.User) // Assuming there is a navigation property for Users in Branch
             .AsQueryable();
 
         if (activeRecordsOnly)

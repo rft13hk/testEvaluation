@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.Application.Branches.GetAllBranches;
 
@@ -67,6 +68,8 @@ public class GetAllBranchesResult
         /// Gets or sets the ID of the user who created this branch.
         /// </summary>
         public Guid UserId { get; set; }
+
+        public virtual User? User { get; set; }
 
     }
 }

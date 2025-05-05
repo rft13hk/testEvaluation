@@ -15,5 +15,6 @@ public class GetBranchProfile : Profile
     {
         CreateMap<GetBranchCommand, Branch>();
         CreateMap<Branch, GetBranchResult>();
+        CreateMap<User, GetBranchResultUser>();
     }
 }

@@ -22,7 +22,7 @@ public class BranchConfiguration : IEntityTypeConfiguration<Branch>
             .HasDefaultValue(null)
             .IsRequired(false);
 
-        builder.HasOne(s2 => s2.Users)
+        builder.HasOne(s2 => s2.User)
             .WithMany(s1 => s1.Branches)
             .HasForeignKey(s => s.UserId)
             .OnDelete(DeleteBehavior.Restrict);

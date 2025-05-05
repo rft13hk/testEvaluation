@@ -43,7 +43,7 @@ public class Branch: BaseEntity
     /// <summary>
     /// Navigation property to the User entities associated with this Branch.
     /// </summary>
-    public virtual required User Users { get; set; } 
+    public virtual required User User { get; set; } 
 
 
     /// <summary>

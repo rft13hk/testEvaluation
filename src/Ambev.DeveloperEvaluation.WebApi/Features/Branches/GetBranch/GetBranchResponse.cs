@@ -35,4 +35,9 @@ public class GetBranchResponse
     /// </summary>
     public Guid UserId { get; set; } = Guid.Empty;
 
+    /// <summary>
+    /// Navigation property to the User entity that created this Branch.
+    /// </summary>
+    public virtual GetBranchResponseUser? User { get; set; } 
+
 }

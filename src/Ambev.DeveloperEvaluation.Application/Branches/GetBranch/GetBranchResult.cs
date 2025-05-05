@@ -39,6 +39,6 @@ public class GetBranchResult
     /// <summary>
     /// Navigation property to the User entity that created this Branch.
     /// </summary>
-    public virtual User? User { get; set; } 
+    public virtual GetBranchResultUser? User { get; set; } 
 
 }
