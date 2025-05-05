@@ -89,10 +89,10 @@ public class CreateBranchHandlerTests
         var command = new CreateBranchCommand
         {
             BranchName = "Valid Branch",
-            UserId = Guid.NewGuid()
+            UserId = Guid.NewGuid()   
         };
 
-        _userRepository.GetByIdAsync(command.UserId, Arg.Any<CancellationToken>()).Returns((User)null);
+        _userRepository.GetByIdAsync(command.UserId, Arg.Any<CancellationToken>()).Returns((User)null!);
 
         // When
         Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);

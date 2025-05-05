@@ -10,7 +10,7 @@ public record DeleteBranchCommand : IRequest<DeleteBranchResponse>
     /// <summary>
     /// The unique identifier of the Branch to delete
     /// </summary>
-    public Guid Id { get; }
+    public Guid Id { get; set;}
 
     /// <summary>
     /// Initializes a new instance of DeleteBranchCommand

@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
 
 /// <summary>
@@ -6,6 +8,7 @@ namespace Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
 /// <remarks>
 /// This response contains the unique identifier of the newly created branch.
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public class CreateBranchResult
 {
     /// <summary>
