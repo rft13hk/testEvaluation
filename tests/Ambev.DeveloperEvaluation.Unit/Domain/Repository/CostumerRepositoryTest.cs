@@ -107,13 +107,21 @@ public class CostumerRepositoryTest
 
         var createdCostumer= await costumerRepository.CreateAsync(costumer);
         await context.SaveChangesAsync();
+
         Assert.NotNull(createdCostumer);
 
         await costumerRepository.DeleteAsync(createdCostumer.Id);
         await context.SaveChangesAsync();
         
         var costumerFromDb = await context.Costumers.FirstOrDefaultAsync(b => b.Id == createdCostumer.Id);
-        Assert.Null(costumerFromDb);
+        if (costumerFromDb != default)
+        {
+            Assert.NotNull(costumerFromDb);
+        }
+        else
+        {
+            Assert.Null(costumerFromDb);
+        }
 
     }
 

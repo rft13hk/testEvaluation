@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Repository;
 
-public class BranchRepositoryTest
+public class ProductRepositoryTest
 {
     public DefaultContext StartDbContextInMemory()
     {
@@ -18,12 +18,12 @@ public class BranchRepositoryTest
         return new DefaultContext(options);
     }
 
-    [Fact(DisplayName = "Create Branch")]
-    [Trait("Category", "BranchRepository")]
-    public async Task CreateBranchTest()
+    [Fact(DisplayName = "Create Product")]
+    [Trait("Category", "ProductRepository")]
+    public async Task CreateProductTest()
     {
         var context = StartDbContextInMemory();
-        var branchRepository = new BranchRepository(context);
+        var ProductRepository = new ProductRepository(context);
 
         #region Create User
         var userRepository = new UserRepository(context);
@@ -45,39 +45,38 @@ public class BranchRepositoryTest
 
         #endregion
 
-        var branch = new Branch
+        var Product = new Product
         {
-            BranchName = "Test Branch",
+            ProductName = "Test Product",
             UserId = createdUser.Id,
-            User = createdUser
+            User = createdUser // Ensure the required 'Users' property is set
         };
 
-        var createdBranch = await branchRepository.CreateAsync(branch);
+        var createdProduct = await ProductRepository.CreateAsync(Product);
         await context.SaveChangesAsync();
-        Assert.NotNull(createdBranch);
+        Assert.NotNull(createdProduct);
 
         var date = DateTime.UtcNow;
 
-        var branchFromDb = await context.Branches.FirstOrDefaultAsync(b => b.Id == createdBranch.Id);
-        Assert.NotNull(branchFromDb);
+        var ProductFromDb = await context.Products.FirstOrDefaultAsync(c => c.Id == createdProduct.Id);
+        Assert.NotNull(ProductFromDb);
 
-        Assert.Equal(branch.Id, branchFromDb.Id);
-        Assert.Equal(branch.BranchName, branchFromDb.BranchName);
-        Assert.Equal(branch.UserId, branchFromDb.UserId);
-        Assert.Equal(branch.User, branchFromDb.User);
+        Assert.Equal(Product.Id, ProductFromDb.Id);
+        Assert.Equal(Product.ProductName, ProductFromDb.ProductName);
+        Assert.Equal(Product.UserId, ProductFromDb.UserId);
+        Assert.Equal(Product.User, ProductFromDb.User);
 
-        Assert.Equal(date.Date, branchFromDb.CreateAt.Date);
-        Assert.Equal(date.Date, branchFromDb.UpdateAt.Date);
-        
-        Assert.Equal(1, context.Branches.Count());
+        Assert.Equal(date.Date, ProductFromDb.CreateAt.Date);
+        Assert.Equal(date.Date, ProductFromDb.UpdateAt.Date);
+
     }
 
-    [Fact(DisplayName = "Delete Branch")]
-    [Trait("Category", "BranchRepository")]
-    public async Task DeleteBranchTest()
+    [Fact(DisplayName = "Delete Product")]
+    [Trait("Category", "ProductRepository")]
+    public async Task DeleteProductTest()
     {
-    var context = StartDbContextInMemory();
-        var branchRepository = new BranchRepository(context);
+        var context = StartDbContextInMemory();
+        var ProductRepository = new ProductRepository(context);
 
         #region Create User
         var userRepository = new UserRepository(context);
@@ -99,37 +98,39 @@ public class BranchRepositoryTest
 
         #endregion
 
-        var branch = new Branch
+        var Product= new Product
         {
-            BranchName = "Test Branch",
+            ProductName = "Test Product",
             UserId = createdUser.Id,
             User = createdUser
         };
 
-        var createdBranch = await branchRepository.CreateAsync(branch);
+        var createdProduct= await ProductRepository.CreateAsync(Product);
         await context.SaveChangesAsync();
-        Assert.NotNull(createdBranch);
 
-        await branchRepository.DeleteAsync(createdBranch.Id);
+        Assert.NotNull(createdProduct);
+
+        await ProductRepository.DeleteAsync(createdProduct.Id);
         await context.SaveChangesAsync();
         
-        var branchFromDb = await context.Branches.FirstOrDefaultAsync(b => b.Id == createdBranch.Id);
-        if (branchFromDb != default)
+        var ProductFromDb = await context.Products.FirstOrDefaultAsync(b => b.Id == createdProduct.Id);
+        if (ProductFromDb != default)
         {
-            Assert.NotNull(branchFromDb);
+            Assert.NotNull(ProductFromDb);
         }
         else
         {
-            Assert.Null(branchFromDb);
+            Assert.Null(ProductFromDb);
         }
+
     }
 
-    [Fact(DisplayName = "Update Branch")]
-    [Trait("Category", "BranchRepository")]
-    public async Task UpdateBranchTest()
+    [Fact(DisplayName = "Update Product")]
+    [Trait("Category", "ProductRepository")]
+    public async Task UpdateProductTest()
     {
         var context = StartDbContextInMemory();
-        var branchRepository = new BranchRepository(context);
+        var ProductRepository = new ProductRepository(context);
 
         #region Create User
         var userRepository = new UserRepository(context);
@@ -151,31 +152,31 @@ public class BranchRepositoryTest
 
         #endregion
 
-        var branch = new Branch
+        var Product= new Product
         {
-            BranchName = "Original Branch",
+            ProductName = "Original Product",
             UserId = createdUser.Id,
-            User = createdUser
+            User = createdUser // Ensure the required 'Users' property is set
         };
 
-        var createdBranch = await branchRepository.CreateAsync(branch);
+        var createdProduct= await ProductRepository.CreateAsync(Product);
         await context.SaveChangesAsync();
-        Assert.NotNull(createdBranch);
+        Assert.NotNull(createdProduct);
 
-        // Update branch details
-        createdBranch.BranchName = "Updated Branch";
+        // Update Product details
+        createdProduct.ProductName = "Updated Product";
 
-        var updatedBranch = await branchRepository.UpdateAsync(createdBranch);
+        var updatedProduct = await ProductRepository.UpdateAsync(createdProduct);
         await context.SaveChangesAsync();
-        Assert.NotNull(updatedBranch);
+        Assert.NotNull(updatedProduct);
 
-        var branchFromDb = await context.Branches.FirstOrDefaultAsync(b => b.Id == createdBranch.Id);
-        Assert.NotNull(branchFromDb);
+        var ProductFromDb = await context.Products.FirstOrDefaultAsync(b => b.Id == createdProduct.Id);
+        Assert.NotNull(ProductFromDb);
 
-        Assert.Equal("Updated Branch", branchFromDb.BranchName);
-        Assert.Equal(createdBranch.Id, branchFromDb.Id);
-        Assert.Equal(createdBranch.UserId, branchFromDb.UserId);
-        Assert.Equal(createdBranch.User, branchFromDb.User);
+        Assert.Equal("Updated Product", ProductFromDb.ProductName);
+        Assert.Equal(createdProduct.Id, ProductFromDb.Id);
+        Assert.Equal(createdProduct.UserId, ProductFromDb.UserId);
+        Assert.Equal(createdProduct.User, ProductFromDb.User);
     }
 
 

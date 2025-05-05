@@ -62,7 +62,7 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Products
-            .Include(b => b.UserId) // Assuming there is a navigation property for UserId in Product
+            .Include(b => b.User) // Assuming there is a navigation property for User in Product
             .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
             .FirstOrDefaultAsync(b => b.Id == id, cancellationToken); // Changed to FirstOrDefaultAsync for better null handling
     }
@@ -76,7 +76,7 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> GetByProductCodeAsync(string productCode, CancellationToken cancellationToken = default)
     {
         return await _context.Products
-            .Include(c => c.UserId) // Assuming there is a navigation property for UserId in Product
+            .Include(c => c.User) // Assuming there is a navigation property for User in Product
             .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
             .FirstOrDefaultAsync(c => c.DeletedAt == null && c.ProductCode == productCode, cancellationToken);
     }
@@ -118,7 +118,7 @@ public class ProductRepository : IProductRepository
         }
 
         return await query
-            .Include(b => b.UserId) // Assuming there is a navigation property for UserId in Product
+            .Include(b => b.User) // Assuming there is a navigation property for User in Product
             .AsNoTracking() // Use AsNoTracking for read-only queries to improve performance
             .Skip((page - 1) * size)
             .Take(size)
