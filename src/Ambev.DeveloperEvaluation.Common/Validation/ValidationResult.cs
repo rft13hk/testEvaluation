@@ -1,7 +1,9 @@
-﻿using FluentValidation.Results;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation.Results;
 
 namespace Ambev.DeveloperEvaluation.Common.Validation;
 
+[ExcludeFromCodeCoverage]
 public class ValidationResultDetail
 {
     public bool IsValid { get; set; }

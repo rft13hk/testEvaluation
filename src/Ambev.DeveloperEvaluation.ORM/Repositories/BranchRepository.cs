@@ -34,6 +34,33 @@ public class BranchRepository : IBranchRepository
     }
 
     /// <summary>
+    /// Updates an existing branch in the database
+    /// </summary>
+    /// <param name="branch">The branch to update</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The updated branch</returns>
+    public async Task<Branch?> UpdateAsync(Branch branch, CancellationToken cancellationToken = default)
+    {
+        var existingBranch = await _context.Branches
+            .FirstOrDefaultAsync(b => b.Id == branch.Id, cancellationToken);
+
+        if (existingBranch == null)
+            return null;
+
+        // Update properties
+        existingBranch.BranchName = branch.BranchName;
+        existingBranch.UpdateAt = DateTime.UtcNow;
+
+        // Update other properties as needed
+        // existingBranch.Property = branch.Property;
+
+        _context.Branches.Update(existingBranch);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return existingBranch;
+    }
+
+    /// <summary>
     /// Retrieves a branch by its unique identifier
     /// </summary>
     /// <param name="id">The unique identifier of the branch</param>

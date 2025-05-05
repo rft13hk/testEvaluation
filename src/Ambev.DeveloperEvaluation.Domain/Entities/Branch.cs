@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using Ambev.DeveloperEvaluation.Domain.Common;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
@@ -6,6 +7,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities;
 /// <summary>
 /// Represents a Branch, used to identify in sales which branch the sale occurred from.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class Branch: BaseEntity
 {
     /// <summary>

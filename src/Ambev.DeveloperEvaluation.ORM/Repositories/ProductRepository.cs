@@ -34,6 +34,26 @@ public class ProductRepository : IProductRepository
     }
 
     /// <summary>
+    /// Updates an existing Product in the database
+    /// </summary>
+    /// <param name="product">The Product to update</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The updated Product</returns>
+    public async Task<Product?> UpdateAsync(Product product, CancellationToken cancellationToken = default)
+    {
+        var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == product.Id, cancellationToken);
+        if (existingProduct == null || existingProduct.DeletedAt != null)
+            return null;
+
+        _context.Entry(existingProduct).CurrentValues.SetValues(product);
+        existingProduct.UpdateAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return existingProduct;
+    }
+
+
+    /// <summary>
     /// Retrieves a Product by its unique identifier
     /// </summary>
     /// <param name="id">The unique identifier of the Product</param>

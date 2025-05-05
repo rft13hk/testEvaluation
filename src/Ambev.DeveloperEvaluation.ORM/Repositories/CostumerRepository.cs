@@ -34,6 +34,30 @@ public class CostumerRepository : ICostumerRepository
     }
 
     /// <summary>
+    /// Updates an existing Costumer in the database
+    /// </summary>
+    /// <param name="costumer">The Costumer to update</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The updated Costumer</returns>
+    public async Task<Costumer?> UpdateAsync(Costumer costumer, CancellationToken cancellationToken = default)
+    {
+        var existingCostumer = await _context.Costumers
+            .FirstOrDefaultAsync(c => c.Id == costumer.Id, cancellationToken);
+
+        if (existingCostumer == null)
+            return null;
+
+        if (existingCostumer.DeletedAt != null)
+            return null;
+
+        _context.Entry(existingCostumer).CurrentValues.SetValues(costumer);
+        existingCostumer.UpdateAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return existingCostumer;
+    }
+
+    /// <summary>
     /// Retrieves a Costumer by its unique identifier
     /// </summary>
     /// <param name="id">The unique identifier of the Costumer</param>
