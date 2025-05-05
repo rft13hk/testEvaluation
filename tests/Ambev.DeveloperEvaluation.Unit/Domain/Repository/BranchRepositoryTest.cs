@@ -178,5 +178,81 @@ public class BranchRepositoryTest
         Assert.Equal(createdBranch.User, branchFromDb.User);
     }
 
+    [Fact(DisplayName = "Get All Branches with Pagination")]
+    [Trait("Category", "BranchRepository")]
+    public async Task GetAllBranchesWithPaginationTest()
+    {
+        var context = StartDbContextInMemory();
+        var branchRepository = new BranchRepository(context);
+
+        #region Create User
+        var userRepository = new UserRepository(context);
+
+        var user = new Ambev.DeveloperEvaluation.Domain.Entities.User
+        {
+            Id = Guid.NewGuid(),
+            Username = "testuser",
+            Phone = "1234567890",
+            Role = UserRole.None,
+            Status = UserStatus.Active,
+            Email = "testuser@example.com",
+            Password = "password",
+        };
+
+        var createdUser = await userRepository.CreateAsync(user);
+        await context.SaveChangesAsync();
+        Assert.NotNull(createdUser);
+
+        #endregion
+
+        var listToCompare = new List<string>();
+
+        // Create multiple branches
+        for (int i = 1; i <= 15; i++)
+        {
+            var branch = new Branch
+            {
+                BranchName = $"Branch {i}",
+                UserId = createdUser.Id,
+                User = createdUser
+            };
+
+            listToCompare.Add(branch.BranchName);
+
+            await branchRepository.CreateAsync(branch);
+        }
+        await context.SaveChangesAsync();
+
+        var listToCompareOrdered = listToCompare.OrderBy(o => o).ToList();    
+
+        // Retrieve paginated branches
+        var page = 1;
+        var size = 10;
+        var branches = await branchRepository.GetAllAsync(page, size);
+
+        Assert.NotNull(branches);
+        Assert.Equal(size, branches.Count());
+
+        // Verify the first page contains the correct branches
+        var branchList = branches.OrderBy(o => o.BranchName).ToList();
+        for (int i = 0; i < size; i++)
+        {
+            Assert.Equal(listToCompareOrdered[i], branchList[i].BranchName);
+        }
+
+        // Retrieve the second page
+        page = 2;
+        branches = await branchRepository.GetAllAsync(page, size);
+
+        Assert.NotNull(branches);
+        Assert.Equal(5, branches.Count()); // Remaining branches
+
+        branchList = branches.OrderBy(o => o.BranchName).ToList();
+        for (int i = 0; i < branchList.Count; i++)
+        {
+            Assert.Equal(listToCompareOrdered[i+10], branchList[i].BranchName);
+        }
+    }
+
 
 }

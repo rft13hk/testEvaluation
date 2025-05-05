@@ -180,4 +180,81 @@ public class ProductRepositoryTest
     }
 
 
+    [Fact(DisplayName = "Get All Products with Pagination")]
+    [Trait("Category", "ProductRepository")]
+    public async Task GetAllProductsWithPaginationTest()
+    {
+        var context = StartDbContextInMemory();
+        var productRepository = new ProductRepository(context);
+
+        #region Create User
+        var userRepository = new UserRepository(context);
+
+        var user = new Ambev.DeveloperEvaluation.Domain.Entities.User
+        {
+            Id = Guid.NewGuid(),
+            Username = "testuser",
+            Phone = "1234567890",
+            Role = UserRole.None,
+            Status = UserStatus.Active,
+            Email = "testuser@example.com",
+            Password = "password",
+        };
+
+        var createdUser = await userRepository.CreateAsync(user);
+        await context.SaveChangesAsync();
+        Assert.NotNull(createdUser);
+
+        #endregion
+
+        var listToCompare = new List<string>();
+
+        // Create multiple productes
+        for (int i = 1; i <= 15; i++)
+        {
+            var product = new Product
+            {
+                ProductName = $"Product {i}",
+                UserId = createdUser.Id,
+                User = createdUser
+            };
+
+            listToCompare.Add(product.ProductName);
+
+            await productRepository.CreateAsync(product);
+        }
+        await context.SaveChangesAsync();
+
+        var listToCompareOrdered = listToCompare.OrderBy(o => o).ToList();    
+
+        // Retrieve paginated productes
+        var page = 1;
+        var size = 10;
+        var products = await productRepository.GetAllAsync(page, size);
+
+        Assert.NotNull(products);
+        Assert.Equal(size, products.Count());
+
+        // Verify the first page contains the correct productes
+        var productList = products.OrderBy(o => o.ProductName).ToList();
+        for (int i = 0; i < size; i++)
+        {
+            Assert.Equal(listToCompareOrdered[i], productList[i].ProductName);
+        }
+
+        // Retrieve the second page
+        page = 2;
+        products = await productRepository.GetAllAsync(page, size);
+
+        Assert.NotNull(products);
+        Assert.Equal(5, products.Count()); // Remaining product
+
+        productList = products.OrderBy(o => o.ProductName).ToList();
+        for (int i = 0; i < productList.Count; i++)
+        {
+            Assert.Equal(listToCompareOrdered[i+10], productList[i].ProductName);
+        }
+    }
+
+
 }
