@@ -38,7 +38,7 @@ public class DeleteCostumerHandler : IRequestHandler<DeleteCostumerCommand, Dele
 
         var success = await _CostumerRepository.DeleteAsync(request.Id, cancellationToken);
         if (!success)
-            throw new KeyNotFoundException($"Costumer with ID {request.Id} not found");
+            throw new KeyNotFoundException($"Costumer with ID {request.Id} not found.");
 
         return new DeleteCostumerResponse { Success = true };
     }
