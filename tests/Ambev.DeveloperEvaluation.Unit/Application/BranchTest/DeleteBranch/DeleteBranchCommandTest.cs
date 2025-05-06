@@ -2,7 +2,7 @@ using Ambev.DeveloperEvaluation.Application.Branches.DeleteBranch;
 using FluentAssertions;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application.Branch.DeleteBranch;
+namespace Ambev.DeveloperEvaluation.Unit.Application.BranchTest.DeleteBranch;
 
 /// <summary>
 /// Unit tests for the <see cref="DeleteBranchCommand"/> class.

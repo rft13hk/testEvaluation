@@ -7,7 +7,7 @@ using FluentValidation;
 using NSubstitute;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application.Branch.CreateBranch;
+namespace Ambev.DeveloperEvaluation.Unit.Application.BranchTest.CreateBranch;
 
 /// <summary>
 /// Unit tests for the <see cref="CreateBranchHandler"/> class.

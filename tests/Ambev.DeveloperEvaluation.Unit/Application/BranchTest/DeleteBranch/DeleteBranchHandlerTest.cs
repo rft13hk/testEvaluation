@@ -5,7 +5,7 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application.Branch.DeleteBranch;
+namespace Ambev.DeveloperEvaluation.Unit.Application.BranchTest.DeleteBranch;
 
 /// <summary>
 /// Unit tests for the <see cref="DeleteBranchHandler"/> class.
@@ -36,7 +36,7 @@ public class DeleteBranchHandlerTest
             { 
                 Id = branchId,
                 UserId = Guid.NewGuid(),
-                User = new User { Id = Guid.NewGuid() },
+                User = new Ambev.DeveloperEvaluation.Domain.Entities.User { Id = Guid.NewGuid() },
             });
         _branchRepository.DeleteAsync(branchId, Arg.Any<CancellationToken>())
             .Returns(true);

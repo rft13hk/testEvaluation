@@ -8,7 +8,7 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application;
+namespace Ambev.DeveloperEvaluation.Unit.Application.UserTest.CreateUserTest;
 
 /// <summary>
 /// Contains unit tests for the <see cref="CreateUserHandler"/> class.
@@ -40,7 +40,7 @@ public class CreateUserHandlerTests
     {
         // Given
         var command = CreateUserHandlerTestData.GenerateValidCommand();
-        var user = new User
+        var user = new Ambev.DeveloperEvaluation.Domain.Entities.User
         {
             Id = Guid.NewGuid(),
             Username = command.Username,
@@ -57,7 +57,7 @@ public class CreateUserHandlerTests
         };
 
 
-        _mapper.Map<User>(command).Returns(user);
+        _mapper.Map<Ambev.DeveloperEvaluation.Domain.Entities.User>(command).Returns(user);
         _mapper.Map<CreateUserResult>(user).Returns(result);
 
         _userRepository.CreateAsync(Arg.Any<User>(), Arg.Any<CancellationToken>())
