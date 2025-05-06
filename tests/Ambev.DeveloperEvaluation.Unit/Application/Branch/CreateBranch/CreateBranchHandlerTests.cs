@@ -7,7 +7,7 @@ using FluentValidation;
 using NSubstitute;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application.Branch;
+namespace Ambev.DeveloperEvaluation.Unit.Application.Branch.CreateBranch;
 
 /// <summary>
 /// Unit tests for the <see cref="CreateBranchHandler"/> class.
@@ -30,7 +30,8 @@ public class CreateBranchHandlerTests
         _handler = new CreateBranchHandler(_branchRepository, _userRepository, _mapper);
     }
 
-    [Fact(DisplayName = "Given valid command When handling Then creates branch successfully")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given valid command When handling Then creates branch successfully")]
     public async Task Handle_ValidCommand_CreatesBranchSuccessfully()
     {
         // Given
@@ -69,7 +70,8 @@ public class CreateBranchHandlerTests
         await _branchRepository.Received(1).CreateAsync(branch, Arg.Any<CancellationToken>());
     }
 
-    [Fact(DisplayName = "Given invalid command When handling Then throws validation exception")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given invalid command When handling Then throws validation exception")]
     public async Task Handle_InvalidCommand_ThrowsValidationException()
     {
         // Given
@@ -82,7 +84,8 @@ public class CreateBranchHandlerTests
         await act.Should().ThrowAsync<ValidationException>();
     }
 
-    [Fact(DisplayName = "Given non-existent user When handling Then throws invalid operation exception")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given non-existent user When handling Then throws invalid operation exception")]
     public async Task Handle_NonExistentUser_ThrowsInvalidOperationException()
     {
         // Given

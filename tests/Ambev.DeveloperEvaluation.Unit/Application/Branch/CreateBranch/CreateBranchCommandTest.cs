@@ -3,14 +3,15 @@ using Ambev.DeveloperEvaluation.Common.Validation;
 using FluentAssertions;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application.Branch;
+namespace Ambev.DeveloperEvaluation.Unit.Application.Branch.CreateBranch;
 
 /// <summary>
 /// Unit tests for the <see cref="CreateBranchCommand"/> class.
 /// </summary>
 public class CreateBranchCommandTests
 {
-    [Fact(DisplayName = "Given valid data When validating Then returns valid result")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given valid data When validating Then returns valid result")]
     public void Validate_ValidData_ShouldReturnValidResult()
     {
         // Given
@@ -28,7 +29,8 @@ public class CreateBranchCommandTests
         validationResult.Errors.Should().BeEmpty();
     }
 
-    [Fact(DisplayName = "Given empty branch name When validating Then returns invalid result")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given empty branch name When validating Then returns invalid result")]
     public void Validate_EmptyBranchName_ShouldReturnInvalidResult()
     {
         // Given
@@ -49,7 +51,8 @@ public class CreateBranchCommandTests
             error.Detail == "Branch name is required.");
     }
 
-    [Fact(DisplayName = "Given empty user ID When validating Then returns invalid result")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given empty user ID When validating Then returns invalid result")]
     public void Validate_EmptyUserId_ShouldReturnInvalidResult()
     {
         // Given
@@ -68,7 +71,8 @@ public class CreateBranchCommandTests
             error.Detail == "User ID is required.");
     }
 
-    [Fact(DisplayName = "Given empty branch name and user ID When validating Then returns multiple errors")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given empty branch name and user ID When validating Then returns multiple errors")]
     public void Validate_EmptyBranchNameAndUserId_ShouldReturnMultipleErrors()
     {
         // Given

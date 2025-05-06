@@ -5,7 +5,7 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application.Branch;
+namespace Ambev.DeveloperEvaluation.Unit.Application.Branch.DeleteBranch;
 
 /// <summary>
 /// Unit tests for the <see cref="DeleteBranchHandler"/> class.
@@ -24,7 +24,9 @@ public class DeleteBranchHandlerTest
         _handler = new DeleteBranchHandler(_branchRepository);
     }
 
-    [Fact(DisplayName = "Given valid branch ID When handling Then deletes branch successfully")]
+
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Delete Branch - Given valid branch ID When handling Then deletes branch successfully")]
     public async Task Handle_ValidBranchId_DeletesBranchSuccessfully()
     {
         // Given
@@ -47,7 +49,8 @@ public class DeleteBranchHandlerTest
         await _branchRepository.Received(1).DeleteAsync(branchId, Arg.Any<CancellationToken>());
     }
 
-    [Fact(DisplayName = "Given non-existent branch ID When handling Then throws invalid operation exception")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Delete Branch - Given non-existent branch ID When handling Then throws invalid operation exception")]
     public async Task Handle_NonExistentBranchId_ThrowsInvalidOperationException()
     {
         // Given

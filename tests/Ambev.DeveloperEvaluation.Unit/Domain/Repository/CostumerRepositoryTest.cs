@@ -12,7 +12,7 @@ public class CostumerRepositoryTest
     public DefaultContext StartDbContextInMemory()
     {
         var options = new DbContextOptionsBuilder<DefaultContext>()
-            .UseInMemoryDatabase(databaseName: "BancoDeTeste")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unique database name for each instance
             .Options;
 
         return new DefaultContext(options);

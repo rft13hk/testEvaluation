@@ -2,7 +2,7 @@ using Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace Ambev.DeveloperEvaluation.Unit.Application.Branch;
+namespace Ambev.DeveloperEvaluation.Unit.Application.Branch.CreateBranch;
 
 /// <summary>
 /// Unit tests for the <see cref="CreateBranchValidator"/> class.
@@ -19,7 +19,8 @@ public class CreateBranchValidatorTests
         _validator = new CreateBranchValidator();
     }
 
-    [Fact(DisplayName = "Given valid data When validating Then validation succeeds")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given valid data When validating Then validation succeeds")]
     public void Validate_ValidData_ShouldPass()
     {
         // Given
@@ -36,7 +37,8 @@ public class CreateBranchValidatorTests
         result.ShouldNotHaveAnyValidationErrors();
     }
 
-    [Fact(DisplayName = "Given empty branch name When validating Then validation fails")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given empty branch name When validating Then validation fails")]
     public void Validate_EmptyBranchName_ShouldFail()
     {
         // Given
@@ -54,7 +56,8 @@ public class CreateBranchValidatorTests
             .WithErrorMessage("Branch name is required.");
     }
 
-    [Fact(DisplayName = "Given empty user ID When validating Then validation fails")]
+    [Trait("Category", "ApplicationBranch")]
+    [Fact(DisplayName = "Create Branch - Given empty user ID When validating Then validation fails")]
     public void Validate_EmptyUserId_ShouldFail()
     {
         // Given

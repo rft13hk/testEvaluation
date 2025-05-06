@@ -21,7 +21,7 @@ public class SaleItemRepositoryTest
     public DefaultContext StartDbContextInMemory()
     {
         var options = new DbContextOptionsBuilder<DefaultContext>()
-            .UseInMemoryDatabase(databaseName: "BancoDeTeste")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         return new DefaultContext(options);
