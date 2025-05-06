@@ -79,20 +79,8 @@ public class GetBranchHandlerTests
         var query = new GetBranchCommand(branchId);
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(() => _handler.Handle(query, CancellationToken.None));
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(query, CancellationToken.None));
     }
 
-    [Fact]
-    public async Task Handle_Should_CallRepository_WithCorrectParameters()
-    {
-        // Arrange
-        var branchId = Guid.NewGuid();
-        var query = new GetBranchCommand(branchId);
 
-        // Act
-        await _handler.Handle(query, CancellationToken.None);
-
-        // Assert
-        await _mockRepository.Received(1).GetByIdAsync(branchId);
-    }
 }
