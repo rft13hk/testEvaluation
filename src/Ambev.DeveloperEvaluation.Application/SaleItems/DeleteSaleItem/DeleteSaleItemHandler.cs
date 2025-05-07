@@ -38,7 +38,7 @@ public class DeleteSaleItemHandler : IRequestHandler<DeleteSaleItemCommand, Dele
 
         var success = await _SaleItemRepository.DeleteAsync(request.Id, cancellationToken);
         if (!success)
-            throw new KeyNotFoundException($"SaleItem with ID {request.Id} not found");
+            throw new KeyNotFoundException($"SaleItem with ID {request.Id} not found.");
 
         return new DeleteSaleItemResponse { Success = true };
     }

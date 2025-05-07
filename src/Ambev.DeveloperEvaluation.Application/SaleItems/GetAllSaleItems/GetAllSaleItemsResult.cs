@@ -38,6 +38,8 @@ public class GetAllSaleItemsResult
     /// </summary>
     public class SaleItemDto
     {
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Represents the unique identifier of the Sale.
         /// Must be valid and not null or empty.

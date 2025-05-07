@@ -8,6 +8,9 @@ namespace Ambev.DeveloperEvaluation.Application.SaleItems.GetSaleItem;
 /// </summary>
 public class GetSaleItemResult
 {
+
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Represents the unique identifier of the Sale.
     /// Must be valid and not null or empty.
@@ -20,11 +23,11 @@ public class GetSaleItemResult
     /// </summary>
     public DateTimeOffset SaleDate { get; set; } = DateTimeOffset.UtcNow;
 
+
     /// <summary>
-    /// Represents the unique identifier of the SaleItem.
-    /// Must be valid and not null or empty.
+    /// represents the ID of the Product
     /// </summary>
-    public Guid SaleItemId { get; set; }
+    public Guid ProductId { get; set; }
 
     /// <summary>
     /// represents the unit price of the saleitem.
